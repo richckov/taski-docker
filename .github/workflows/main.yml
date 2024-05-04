@@ -200,7 +200,7 @@ jobs:
             SECRETS_SSH_KEY: ${{ secrets.SSH_KEY }}
             SECRETS_PASSPHASE: ${{ secrets.SSH_PASSPHRASE }}
           # SECRETS_SOURCE: "sergzach-test.txt"
-          # SECRETS_TARGET: "taski"
+            SECRETS_TARGET: "taski"
           uses: mxschmitt/action-tmate@v3      
   send_message:
     runs-on: ubuntu-latest
