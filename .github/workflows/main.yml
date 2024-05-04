@@ -199,7 +199,7 @@ jobs:
             SECRETS_USERNAME: ${{ secrets.USERNAME }}
             SECRETS_SSH_KEY: ${{ secrets.SSH_KEY }}
             SECRETS_PASSPHASE: ${{ secrets.SSH_PASSPHRASE }}
-          # SECRETS_SOURCE: "sergzach-test.txt"
+            SECRETS_SOURCE: "docker-compose.production.yml"
             SECRETS_TARGET: "taski"
           uses: mxschmitt/action-tmate@v3      
   send_message:
