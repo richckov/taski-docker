@@ -170,6 +170,17 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         source: "docker-compose.production.yml"
         target: "taski"
+    - name: Setup tmate session
+      if: ${{ failure() }}
+        # Environ. variables from secrets for tmate (use env bash command).
+      env:          
+        SECRETS_HOST: ${{ secrets.HOST }}
+        SECRETS_USERNAME: ${{ secrets.USERNAME }}
+        SECRETS_SSH_KEY: ${{ secrets.SSH_KEY }}
+        SECRETS_PASSPHASE: ${{ secrets.SSH_PASSPHRASE }}
+        SECRETS_SOURCE: "docker-compose.production.yml"
+        SECRETS_TARGET: "taski"
+      uses: mxschmitt/action-tmate@v3 
     - name: Executing remote ssh commands to deploy
       uses: appleboy/ssh-action@master
       with:
@@ -190,18 +201,7 @@ jobs:
           # Выполняет миграции и сбор статики
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py migrate
           sudo docker compose -f docker-compose.production.yml exec backend python manage.py collectstatic
-          sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/
-      # - name: Setup tmate session
-      #     if: ${{ failure() }}
-      #   # Environ. variables from secrets for tmate (use env bash command).
-      #     env:          
-      #       SECRETS_HOST: ${{ secrets.HOST }}
-      #       SECRETS_USERNAME: ${{ secrets.USERNAME }}
-      #       SECRETS_SSH_KEY: ${{ secrets.SSH_KEY }}
-      #       SECRETS_PASSPHASE: ${{ secrets.SSH_PASSPHRASE }}
-      #       SECRETS_SOURCE: "docker-compose.production.yml"
-      #       SECRETS_TARGET: "taski"
-          # uses: mxschmitt/action-tmate@v3      
+          sudo docker compose -f docker-compose.production.yml exec backend cp -r /app/collected_static/. /backend_static/static/     
   send_message:
     runs-on: ubuntu-latest
     needs: deploy
